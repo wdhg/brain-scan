@@ -36,7 +36,6 @@ const title = `
 `
 
 var wg = &sync.WaitGroup{}
-var ms = flag.Int64("t", 200, "timeout in milliseconds")
 
 func usage() {
 	fmt.Printf("Usage: %s [OPTIONS] host\n", os.Args[0])
@@ -55,6 +54,8 @@ func scanPort(address string, port int, wait time.Duration) {
 
 func main() {
 	fmt.Print(title)
+
+	ms := flag.Int64("t", 200, "timeout in milliseconds")
 
 	flag.Parse()
 	if flag.NArg() != 1 {
