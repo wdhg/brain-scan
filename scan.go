@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"net"
-	"os"
 	"strconv"
 	"sync"
 	"time"
@@ -41,16 +40,11 @@ var timeout = flag.Int64("d", 500, "timeout delay in milliseconds")
 var portLower = flag.Int("pl", 0, "lower port bound")
 var portUpper = flag.Int("pu", 1000, "upper port bound")
 
-func usage() {
-	fmt.Printf("Usage: %s [OPTIONS] -t target\n", os.Args[0])
-	flag.PrintDefaults()
-}
-
 func init() {
 	fmt.Print(title)
 	flag.Parse()
 	if flag.NFlag() < 1 || *target == "" {
-		usage()
+		flag.Usage()
 		return
 	}
 }
