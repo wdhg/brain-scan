@@ -54,7 +54,7 @@ func scanPort(address string, port int, wait time.Duration) {
 
 func main() {
 	fmt.Print(title)
-
+	// flag handling
 	host := flag.String("h", "", "target")
 	ms := flag.Int64("t", 500, "timeout in milliseconds")
 	portLower := flag.Int("pl", 0, "lower port bound")
@@ -66,7 +66,6 @@ func main() {
 	}
 
 	portRange := *portUpper - *portLower
-
 	wg.Add(portRange)
 	fmt.Printf("PORT		STATUS\n")
 	for i := 0; i < portRange; i++ {
