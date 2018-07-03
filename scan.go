@@ -61,7 +61,7 @@ func scanPort(address string, port int, wait time.Duration) {
 
 func main() {
 	portRange := *portUpper - *portLower
-	wg.Add(portRange)
+	wg.Add(portRange + 1)
 	fmt.Printf("PORT		STATUS\n")
 	for i := 0; i <= portRange; i++ {
 		go scanPort(
