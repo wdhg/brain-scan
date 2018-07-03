@@ -63,7 +63,7 @@ func main() {
 	portRange := *portUpper - *portLower
 	wg.Add(portRange)
 	fmt.Printf("PORT		STATUS\n")
-	for i := 0; i < portRange; i++ {
+	for i := 0; i <= portRange; i++ {
 		go scanPort(
 			*target,
 			*portLower+i,
