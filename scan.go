@@ -36,10 +36,23 @@ const title = `
 `
 
 var wg = &sync.WaitGroup{}
+var host = flag.String("h", "", "target")
+var ms = flag.Int64("t", 500, "timeout in milliseconds")
+var portLower = flag.Int("pl", 0, "lower port bound")
+var portUpper = flag.Int("pu", 1000, "upper port bound")
 
 func usage() {
 	fmt.Printf("Usage: %s [OPTIONS] host\n", os.Args[0])
 	flag.PrintDefaults()
+}
+
+func init() {
+	fmt.Print(title)
+	flag.Parse()
+	if flag.NFlag() < 1 || *host == "" {
+		usage()
+		return
+	}
 }
 
 // basic connect to port
@@ -53,18 +66,6 @@ func scanPort(address string, port int, wait time.Duration) {
 }
 
 func main() {
-	fmt.Print(title)
-	// flag handling
-	host := flag.String("h", "", "target")
-	ms := flag.Int64("t", 500, "timeout in milliseconds")
-	portLower := flag.Int("pl", 0, "lower port bound")
-	portUpper := flag.Int("pu", 1000, "upper port bound")
-	flag.Parse()
-	if flag.NFlag() < 1 || *host == "" {
-		usage()
-		return
-	}
-
 	portRange := *portUpper - *portLower
 	wg.Add(portRange)
 	fmt.Printf("PORT		STATUS\n")
