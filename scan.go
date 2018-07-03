@@ -44,10 +44,10 @@ func usage() {
 
 // basic connect to port
 func scanPort(address string, port int, wait time.Duration) {
-	c, err := net.DialTimeout("tcp", address+":"+strconv.Itoa(port), wait)
+	conn, err := net.DialTimeout("tcp", address+":"+strconv.Itoa(port), wait)
 	if err == nil {
 		fmt.Printf("%v/tcp		open\n", port)
-		c.Close()
+		conn.Close()
 	}
 	wg.Done()
 }
@@ -55,19 +55,26 @@ func scanPort(address string, port int, wait time.Duration) {
 func main() {
 	fmt.Print(title)
 
-	ms := flag.Int64("t", 200, "timeout in milliseconds")
-
+	host := flag.String("h", "", "target")
+	ms := flag.Int64("t", 500, "timeout in milliseconds")
+	portLower := flag.Int("pl", 0, "lower port bound")
+	portUpper := flag.Int("pu", 1000, "upper port bound")
 	flag.Parse()
-	if flag.NArg() != 1 {
+	if flag.NFlag() < 1 || *host == "" {
 		usage()
 		return
 	}
-	host := flag.Arg(0)
 
-	wg.Add(1000)
+	portRange := *portUpper - *portLower
+
+	wg.Add(portRange)
 	fmt.Printf("PORT		STATUS\n")
-	for i := 0; i < 1000; i++ {
-		go scanPort(host, i, time.Duration(*ms)*time.Millisecond)
+	for i := 0; i < portRange; i++ {
+		go scanPort(
+			*host,
+			*portLower+i,
+			time.Duration(*ms)*time.Millisecond,
+		)
 	}
 
 	wg.Wait()
