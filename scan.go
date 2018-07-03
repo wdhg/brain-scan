@@ -36,20 +36,20 @@ const title = `
 `
 
 var wg = &sync.WaitGroup{}
-var host = flag.String("h", "", "target")
-var ms = flag.Int64("t", 500, "timeout in milliseconds")
+var target = flag.String("t", "", "target")
+var timeout = flag.Int64("d", 500, "timeout delay in milliseconds")
 var portLower = flag.Int("pl", 0, "lower port bound")
 var portUpper = flag.Int("pu", 1000, "upper port bound")
 
 func usage() {
-	fmt.Printf("Usage: %s [OPTIONS] host\n", os.Args[0])
+	fmt.Printf("Usage: %s [OPTIONS] -t target\n", os.Args[0])
 	flag.PrintDefaults()
 }
 
 func init() {
 	fmt.Print(title)
 	flag.Parse()
-	if flag.NFlag() < 1 || *host == "" {
+	if flag.NFlag() < 1 || *target == "" {
 		usage()
 		return
 	}
@@ -71,9 +71,9 @@ func main() {
 	fmt.Printf("PORT		STATUS\n")
 	for i := 0; i < portRange; i++ {
 		go scanPort(
-			*host,
+			*target,
 			*portLower+i,
-			time.Duration(*ms)*time.Millisecond,
+			time.Duration(*timeout)*time.Millisecond,
 		)
 	}
 
